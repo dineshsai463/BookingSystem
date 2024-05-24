@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Movie Selection</title>
+</head>
+<body>
+    <h2>Select Movie and Seats</h2>
+    <form th:action="@{/book}" method="post">
+        <input type="hidden" name="username" th:value="${username}">
+        <label for="movie">Select Movie:</label>
+        <select name="movie" id="movie" th:onchange="this.form.submit()">
+            <option value="Movie 1" th:selected="${selectedMovie == 'Movie 1'}">Movie 1</option>
+            <option value="Movie 2" th:selected="${selectedMovie == 'Movie 2'}">Movie 2</option>
+        </select>
+        <br><br>
+
+        <div th:if="${bookedSeats != null}">
+            <h3>Your booked seats: <span th:text="${#arrays.toString(bookedSeats)}"></span></h3>
+        </div>
+
+        <h3>Available seats:</h3>
+        <p th:each="seat : ${availableSeats}" th:text="${seat}"></p>
+        <br><br>
+
+        <label for="seats">Select Seats:</label>
+        <input type="text" id="seats" name="seats" placeholder="Enter seat numbers (1-10)">
+        <br><br>
+
+        <input type="submit" value="Book">
+    </form>
+
+    <h3>Currently booked seats:</h3>
+    <div th:each="entry : ${allBookings}">
+        <div th:unless="${entry.key == username}">
+            <p><span th:text="${entry.key}"></span>: <span th:text="${#arrays.toString(entry.value.seats)}"></span></p>
+        </div>
+    </div>
+</body>
+</html>
